@@ -29,7 +29,8 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/stores/${params.id}`
       );
       if (response.ok) {
@@ -45,7 +46,8 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/products/store/${params.id}`
       );
       if (response.ok) {
@@ -63,7 +65,8 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/stores/${params.id}`,
         {
           method: 'PUT',
@@ -87,7 +90,7 @@ export default function ManageStore() {
         const response = await fetch(
           `${
             process.env.NEXT_PUBLIC_API_URL ||
-            'https://matiastorres.netlify.app'
+            'https://backdelnuevo-ucutucu.onrender.com'
           }/api/products/${productId}`,
           {
             method: 'DELETE',

@@ -70,7 +70,8 @@ export default function Profile() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/upload/profile`,
         {
           method: 'POST',
@@ -88,7 +89,7 @@ export default function Profile() {
           ...formData,
           profileImage: `${
             process.env.NEXT_PUBLIC_API_URL ||
-            'https://matiastorres.netlify.app'
+            'https://backdelnuevo-ucutucu.onrender.com'
           }${data.imageUrl}`,
         });
       } else {
@@ -108,7 +109,8 @@ export default function Profile() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/auth/profile`,
         {
           method: 'PUT',

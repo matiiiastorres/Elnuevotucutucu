@@ -42,7 +42,8 @@ export default function AddProduct() {
 
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/products`,
         {
           method: 'POST',

@@ -27,7 +27,8 @@ export default function ImageUpload({
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }/api/upload/${type}`,
         {
           method: 'POST',
@@ -42,7 +43,8 @@ export default function ImageUpload({
 
       if (response.ok) {
         const fullImageUrl = `${
-          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+          process.env.NEXT_PUBLIC_API_URL ||
+          'https://backdelnuevo-ucutucu.onrender.com'
         }${data.imageUrl}`;
         setPreview(fullImageUrl);
         onImageChange(fullImageUrl);
