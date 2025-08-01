@@ -1,51 +1,49 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
-import Header from '../components/Header';
-import Link from 'next/link';
+"use client"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "../context/AuthContext"
+import Header from "../components/Header"
+import Link from "next/link"
 
 export default function Dashboard() {
-  const { user, getAuthHeaders } = useAuth();
-  const router = useRouter();
-  const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user, getAuthHeaders } = useAuth()
+  const router = useRouter()
+  const [stores, setStores] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user) {
-      router.push('/login');
-      return;
+      router.push("/login")
+      return
     }
 
-    if (user.role !== 'store_owner') {
-      router.push('/');
-      return;
+    if (user.role !== "store_owner") {
+      router.push("/")
+      return
     }
 
-    fetchMyStores();
-  }, [user]);
+    fetchMyStores()
+  }, [user])
 
   const fetchMyStores = async () => {
     try {
       const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
-        }/api/stores/my/stores`,
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/stores/my/stores`,
         {
           headers: getAuthHeaders(),
-        }
-      );
+        },
+      )
 
       if (response.ok) {
-        const data = await response.json();
-        setStores(data);
+        const data = await response.json()
+        setStores(data)
       }
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      console.error('Error fetching stores:', error);
-      setLoading(false);
+      console.error("Error fetching stores:", error)
+      setLoading(false)
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -62,7 +60,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -80,12 +78,8 @@ export default function Dashboard() {
         {stores.length === 0 ? (
           <div className="text-center py-12">
             <span className="text-6xl mb-4 block">🏪</span>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No tienes tiendas aún
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Crea tu primera tienda para empezar a vender
-            </p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No tienes tiendas aún</h3>
+            <p className="text-gray-600 mb-6">Crea tu primera tienda para empezar a vender</p>
             <Link href="/dashboard/create-store" className="btn-primary">
               Crear Mi Primera Tienda
             </Link>
@@ -93,13 +87,10 @@ export default function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {stores.map((store) => (
-              <div
-                key={store._id}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
-              >
+              <div key={store._id} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="h-48 bg-gray-200 relative">
                   <img
-                    src={store.image || '/placeholder-store.jpg'}
+                    src={store.image || "/placeholder-store.jpg"}
                     alt={store.name}
                     className="w-full h-full object-cover"
                   />
@@ -112,9 +103,7 @@ export default function Dashboard() {
 
                 <div className="p-4">
                   <h3 className="font-semibold text-lg mb-2">{store.name}</h3>
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {store.description}
-                  </p>
+                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">{store.description}</p>
 
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                     <span className="flex items-center">
@@ -145,5 +134,5 @@ export default function Dashboard() {
         )}
       </div>
     </div>
-  );
+  )
 }

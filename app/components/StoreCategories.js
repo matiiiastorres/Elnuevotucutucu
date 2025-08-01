@@ -1,8 +1,10 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useAuth } from "../context/AuthContext"
 
 export default function StoreCategories() {
+  const { apiUrl } = useAuth()
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function StoreCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/stores`)
+      const response = await fetch(`${apiUrl}/api/categories/stores`)
       const data = await response.json()
       setCategories(data)
     } catch (error) {

@@ -1,8 +1,10 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useAuth } from "../context/AuthContext"
 
 export default function FeaturedStores() {
+  const { apiUrl } = useAuth()
   const [stores, setStores] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -12,7 +14,7 @@ export default function FeaturedStores() {
 
   const fetchStores = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`)
+      const response = await fetch(`${apiUrl}/api/stores`)
       const data = await response.json()
       setStores(data.slice(0, 8)) // Mostrar solo las primeras 8
       setLoading(false)

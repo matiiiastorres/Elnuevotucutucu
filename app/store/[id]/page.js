@@ -1,12 +1,14 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
+import { useAuth } from "../../context/AuthContext"
 import Header from "../../components/Header"
 import ProductCard from "../../components/ProductCard"
 import Cart from "../../components/Cart"
 
 export default function StorePage() {
   const params = useParams()
+  const { apiUrl } = useAuth()
   const [store, setStore] = useState(null)
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -23,7 +25,7 @@ export default function StorePage() {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${params.id}`)
+      const response = await fetch(`${apiUrl}/api/stores/${params.id}`)
       if (response.ok) {
         const data = await response.json()
         setStore(data)
@@ -35,7 +37,7 @@ export default function StorePage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/store/${params.id}`)
+      const response = await fetch(`${apiUrl}/api/products/store/${params.id}`)
       if (response.ok) {
         const data = await response.json()
         setProducts(data)
@@ -49,7 +51,7 @@ export default function StorePage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/store/${params.id}/categories`)
+      const response = await fetch(`${apiUrl}/api/products/store/${params.id}/categories`)
       if (response.ok) {
         const data = await response.json()
         setCategories(data)

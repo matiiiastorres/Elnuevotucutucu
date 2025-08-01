@@ -1,138 +1,126 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
-import Header from '../components/Header';
-import Cart from '../components/Cart';
+"use client"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "../context/AuthContext"
+import Header from "../components/Header"
+import Cart from "../components/Cart"
 
 export default function Profile() {
-  const { user, getAuthHeaders } = useAuth();
-  const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const { user, getAuthHeaders } = useAuth()
+  const router = useRouter()
+  const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    bio: '',
+    name: "",
+    phone: "",
+    bio: "",
     address: {
-      street: '',
-      city: '',
-      zipCode: '',
+      street: "",
+      city: "",
+      zipCode: "",
     },
-    profileImage: '',
-  });
+    profileImage: "",
+  })
 
   useEffect(() => {
     if (!user) {
-      router.push('/login');
-      return;
+      router.push("/login")
+      return
     }
 
     setFormData({
-      name: user.name || '',
-      phone: user.phone || '',
-      bio: user.bio || '',
-      address: user.address || { street: '', city: '', zipCode: '' },
-      profileImage: user.profileImage || '',
-    });
-  }, [user]);
+      name: user.name || "",
+      phone: user.phone || "",
+      bio: user.bio || "",
+      address: user.address || { street: "", city: "", zipCode: "" },
+      profileImage: user.profileImage || "",
+    })
+  }, [user])
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
-    if (name.includes('address.')) {
-      const addressField = name.split('.')[1];
+    if (name.includes("address.")) {
+      const addressField = name.split(".")[1]
       setFormData({
         ...formData,
         address: {
           ...formData.address,
           [addressField]: value,
         },
-      });
+      })
     } else {
       setFormData({
         ...formData,
         [name]: value,
-      });
+      })
     }
-  };
+  }
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]
+    if (!file) return
 
-    setUploading(true);
+    setUploading(true)
 
-    const formDataUpload = new FormData();
-    formDataUpload.append('image', file);
+    const formDataUpload = new FormData()
+    formDataUpload.append("image", file)
 
     try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
-        }/api/upload/profile`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: formDataUpload,
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/upload/profile`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formDataUpload,
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
         setFormData({
           ...formData,
-          profileImage: `${
-            process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
-          }${data.imageUrl}`,
-        });
+          profileImage: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${data.imageUrl}`,
+        })
       } else {
-        alert('Error subiendo imagen: ' + data.message);
+        alert("Error subiendo imagen: " + data.message)
       }
     } catch (error) {
-      alert('Error subiendo imagen');
+      alert("Error subiendo imagen")
     }
 
-    setUploading(false);
-  };
+    setUploading(false)
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
     try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
-        }/api/auth/profile`,
-        {
-          method: 'PUT',
-          headers: getAuthHeaders(),
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/auth/profile`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(formData),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
         // Actualizar usuario en localStorage
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setIsEditing(false);
-        alert('Perfil actualizado exitosamente');
-        window.location.reload(); // Recargar para actualizar el contexto
+        localStorage.setItem("user", JSON.stringify(data.user))
+        setIsEditing(false)
+        alert("Perfil actualizado exitosamente")
+        window.location.reload() // Recargar para actualizar el contexto
       } else {
-        alert('Error: ' + data.message);
+        alert("Error: " + data.message)
       }
     } catch (error) {
-      alert('Error de conexión');
+      alert("Error de conexión")
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   if (!user) {
     return (
@@ -142,7 +130,7 @@ export default function Profile() {
           <h1 className="text-2xl font-bold text-gray-900">Cargando...</h1>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -158,27 +146,22 @@ export default function Profile() {
               <div className="relative">
                 <div className="w-24 h-24 bg-white rounded-full overflow-hidden">
                   <img
-                    src={formData.profileImage || '/placeholder-avatar.jpg'}
+                    src={formData.profileImage || "/placeholder-avatar.jpg"}
                     alt={formData.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 {isEditing && (
                   <label className="absolute bottom-0 right-0 bg-primary-500 text-white p-2 rounded-full cursor-pointer hover:bg-primary-600">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                    {uploading ? '⏳' : '📷'}
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    {uploading ? "⏳" : "📷"}
                   </label>
                 )}
               </div>
               <div className="text-white">
                 <h1 className="text-3xl font-bold">{user.name}</h1>
                 <p className="text-primary-100 capitalize">
-                  {user.role === 'store_owner' ? 'Dueño de tienda' : 'Cliente'}
+                  {user.role === "store_owner" ? "Dueño de tienda" : "Cliente"}
                 </p>
                 <p className="text-primary-200">{user.email}</p>
               </div>
@@ -192,12 +175,10 @@ export default function Profile() {
               <button
                 onClick={() => setIsEditing(!isEditing)}
                 className={`px-4 py-2 rounded-lg font-medium ${
-                  isEditing
-                    ? 'bg-gray-200 text-gray-800'
-                    : 'bg-primary-600 text-white hover:bg-primary-700'
+                  isEditing ? "bg-gray-200 text-gray-800" : "bg-primary-600 text-white hover:bg-primary-700"
                 }`}
               >
-                {isEditing ? 'Cancelar' : 'Editar Perfil'}
+                {isEditing ? "Cancelar" : "Editar Perfil"}
               </button>
             </div>
 
@@ -205,9 +186,7 @@ export default function Profile() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nombre completo
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Nombre completo</label>
                     <input
                       type="text"
                       name="name"
@@ -219,9 +198,7 @@ export default function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Teléfono
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
                     <input
                       type="tel"
                       name="phone"
@@ -234,9 +211,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Biografía
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Biografía</label>
                   <textarea
                     name="bio"
                     value={formData.bio}
@@ -248,9 +223,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Dirección
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
                   <input
                     type="text"
                     name="address.street"
@@ -292,7 +265,7 @@ export default function Profile() {
                     disabled={loading || uploading}
                     className="flex-1 btn-primary disabled:opacity-50"
                   >
-                    {loading ? 'Guardando...' : 'Guardar Cambios'}
+                    {loading ? "Guardando..." : "Guardar Cambios"}
                   </button>
                 </div>
               </form>
@@ -300,33 +273,25 @@ export default function Profile() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      Nombre
-                    </h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Nombre</h3>
                     <p className="text-lg text-gray-900">{user.name}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      Teléfono
-                    </h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Teléfono</h3>
                     <p className="text-lg text-gray-900">{user.phone}</p>
                   </div>
                 </div>
 
                 {user.bio && (
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      Biografía
-                    </h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Biografía</h3>
                     <p className="text-gray-900">{user.bio}</p>
                   </div>
                 )}
 
                 {user.address && (
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      Dirección
-                    </h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Dirección</h3>
                     <p className="text-gray-900">
                       {user.address.street}
                       {user.address.city && `, ${user.address.city}`}
@@ -336,14 +301,8 @@ export default function Profile() {
                 )}
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">
-                    Miembro desde
-                  </h3>
-                  <p className="text-gray-900">
-                    {new Date(
-                      user.createdAt || Date.now()
-                    ).toLocaleDateString()}
-                  </p>
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">Miembro desde</h3>
+                  <p className="text-gray-900">{new Date(user.createdAt || Date.now()).toLocaleDateString()}</p>
                 </div>
               </div>
             )}
@@ -351,11 +310,9 @@ export default function Profile() {
         </div>
 
         {/* Sección adicional para dueños de tienda */}
-        {user.role === 'store_owner' && (
+        {user.role === "store_owner" && (
           <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Panel de Dueño
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Panel de Dueño</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <a
                 href="/dashboard"
@@ -374,5 +331,5 @@ export default function Profile() {
         )}
       </div>
     </div>
-  );
+  )
 }
