@@ -61,8 +61,7 @@ export default function CreateStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/stores`,
         {
           method: 'POST',

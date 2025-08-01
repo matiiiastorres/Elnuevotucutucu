@@ -29,8 +29,7 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/stores/${params.id}`
       );
       if (response.ok) {
@@ -46,8 +45,7 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/products/store/${params.id}`
       );
       if (response.ok) {
@@ -65,8 +63,7 @@ export default function ManageStore() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/stores/${params.id}`,
         {
           method: 'PUT',
@@ -89,8 +86,7 @@ export default function ManageStore() {
       try {
         const response = await fetch(
           `${
-            process.env.NEXT_PUBLIC_API_URL ||
-            'https://backdelnuevo-ucutucu.onrender.com'
+            process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
           }/api/products/${productId}`,
           {
             method: 'DELETE',

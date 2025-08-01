@@ -27,8 +27,7 @@ export default function ImageUpload({
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000m'
         }/api/upload/${type}`,
         {
           method: 'POST',
@@ -43,8 +42,7 @@ export default function ImageUpload({
 
       if (response.ok) {
         const fullImageUrl = `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }${data.imageUrl}`;
         setPreview(fullImageUrl);
         onImageChange(fullImageUrl);

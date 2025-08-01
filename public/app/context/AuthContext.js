@@ -25,8 +25,7 @@ export function AuthProvider({ children }) {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/auth/login`,
         {
           method: 'POST',
@@ -57,8 +56,7 @@ export function AuthProvider({ children }) {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/auth/register`,
         {
           method: 'POST',

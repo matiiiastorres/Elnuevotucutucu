@@ -70,8 +70,7 @@ export default function Profile() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/upload/profile`,
         {
           method: 'POST',
@@ -88,8 +87,7 @@ export default function Profile() {
         setFormData({
           ...formData,
           profileImage: `${
-            process.env.NEXT_PUBLIC_API_URL ||
-            'https://backdelnuevo-ucutucu.onrender.com'
+            process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
           }${data.imageUrl}`,
         });
       } else {
@@ -109,8 +107,7 @@ export default function Profile() {
     try {
       const response = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          'https://backdelnuevo-ucutucu.onrender.com'
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000mp'
         }/api/auth/profile`,
         {
           method: 'PUT',
