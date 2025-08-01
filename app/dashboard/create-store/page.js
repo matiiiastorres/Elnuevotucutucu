@@ -1,94 +1,101 @@
-"use client"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "../../context/AuthContext"
-import Header from "../../components/Header"
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../context/AuthContext';
+import Header from '../../components/Header';
 
 export default function CreateStore() {
-  const { user, getAuthHeaders } = useAuth()
-  const router = useRouter()
+  const { user, getAuthHeaders } = useAuth();
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    category: "restaurant",
-    phone: "",
-    whatsapp: "",
+    name: '',
+    description: '',
+    category: 'restaurant',
+    phone: '',
+    whatsapp: '',
     address: {
-      street: "",
-      city: "",
-      zipCode: "",
+      street: '',
+      city: '',
+      zipCode: '',
     },
-    deliveryTime: "30-45 min",
+    deliveryTime: '30-45 min',
     deliveryFee: 0,
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const categories = [
-    { id: "restaurant", name: "Restaurante" },
-    { id: "supermarket", name: "Supermercado" },
-    { id: "pharmacy", name: "Farmacia" },
-    { id: "convenience", name: "Tienda de Conveniencia" },
-    { id: "bakery", name: "Panadería" },
-    { id: "other", name: "Otro" },
-  ]
+    { id: 'restaurant', name: 'Restaurante' },
+    { id: 'supermarket', name: 'Supermercado' },
+    { id: 'pharmacy', name: 'Farmacia' },
+    { id: 'convenience', name: 'Tienda de Conveniencia' },
+    { id: 'bakery', name: 'Panadería' },
+    { id: 'other', name: 'Otro' },
+  ];
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
 
-    if (name.includes("address.")) {
-      const addressField = name.split(".")[1]
+    if (name.includes('address.')) {
+      const addressField = name.split('.')[1];
       setFormData({
         ...formData,
         address: {
           ...formData.address,
           [addressField]: value,
         },
-      })
+      });
     } else {
       setFormData({
         ...formData,
         [name]: value,
-      })
+      });
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/stores`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(formData),
-      })
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || 'https://matiastorres.netlify.app'
+        }/api/stores`,
+        {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(formData),
+        }
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        router.push("/dashboard")
+        router.push('/dashboard');
       } else {
-        setError(data.message)
+        setError(data.message);
       }
     } catch (error) {
-      setError("Error de conexión")
+      setError('Error de conexión');
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  if (!user || user.role !== "store_owner") {
+  if (!user || user.role !== 'store_owner') {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="max-w-7xl mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900">Acceso denegado</h1>
-          <p className="text-gray-600">Solo los dueños de tienda pueden acceder a esta página.</p>
+          <p className="text-gray-600">
+            Solo los dueños de tienda pueden acceder a esta página.
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -96,13 +103,25 @@ export default function CreateStore() {
       <Header />
 
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Crear Nueva Tienda</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Crear Nueva Tienda
+        </h1>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
-          {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-lg shadow-md p-6 space-y-6"
+        >
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Nombre de la tienda *
             </label>
             <input
@@ -117,7 +136,10 @@ export default function CreateStore() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Descripción *
             </label>
             <textarea
@@ -132,7 +154,10 @@ export default function CreateStore() {
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Categoría *
             </label>
             <select
@@ -152,7 +177,10 @@ export default function CreateStore() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Teléfono *
               </label>
               <input
@@ -168,7 +196,10 @@ export default function CreateStore() {
             </div>
 
             <div>
-              <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="whatsapp"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 WhatsApp *
               </label>
               <input
@@ -185,7 +216,10 @@ export default function CreateStore() {
           </div>
 
           <div>
-            <label htmlFor="address.street" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="address.street"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Dirección *
             </label>
             <input
@@ -202,7 +236,10 @@ export default function CreateStore() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="address.city" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="address.city"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Ciudad *
               </label>
               <input
@@ -217,7 +254,10 @@ export default function CreateStore() {
             </div>
 
             <div>
-              <label htmlFor="address.zipCode" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="address.zipCode"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Código Postal *
               </label>
               <input
@@ -234,7 +274,10 @@ export default function CreateStore() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="deliveryTime"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Tiempo de entrega
               </label>
               <input
@@ -249,7 +292,10 @@ export default function CreateStore() {
             </div>
 
             <div>
-              <label htmlFor="deliveryFee" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="deliveryFee"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Costo de envío ($)
               </label>
               <input
@@ -273,12 +319,16 @@ export default function CreateStore() {
             >
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="flex-1 btn-primary disabled:opacity-50">
-              {loading ? "Creando..." : "Crear Tienda"}
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 btn-primary disabled:opacity-50"
+            >
+              {loading ? 'Creando...' : 'Crear Tienda'}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
