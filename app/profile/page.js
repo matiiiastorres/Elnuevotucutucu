@@ -362,10 +362,10 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
+    // if (!user) {
+    //   router.push('/login');
+    //   return;
+    // }
 
     setFormData({
       name: user.name || '',
@@ -665,12 +665,12 @@ export default function Profile() {
               Panel de Dueño
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a
+              {/* <a
                 href="/dashboard"
                 className="bg-primary-600 hover:bg-primary-700 text-white p-4 rounded-lg text-center font-medium transition-colors"
               >
                 🏪 Gestionar Tiendas
-              </a>
+              </a> */}
               <a
                 href="/dashboard/create-store"
                 className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg text-center font-medium transition-colors"
