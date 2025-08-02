@@ -406,6 +406,7 @@ export default function Profile() {
         ...prev,
         profileImage: url,
       }));
+      console.log('✅ URL generado:', url);
     } catch (error) {
       alert('Error subiendo imagen');
     }
