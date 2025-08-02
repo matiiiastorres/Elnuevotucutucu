@@ -173,7 +173,7 @@ export default function ManageStore() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Productos ({products.length})</h2>
-            <Link href={`/dashboard/store/${params.id}/add-product`} className="btn-primary">
+            <Link href={`/dashboard/store/${store._id}/add-product`} className="btn-primary">
               + Agregar Producto
             </Link>
           </div>
@@ -183,7 +183,7 @@ export default function ManageStore() {
               <span className="text-6xl mb-4 block">📦</span>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No tienes productos aún</h3>
               <p className="text-gray-600 mb-6">Agrega tu primer producto para empezar a vender</p>
-              <Link href={`/dashboard/store/${params.id}/add-product`} className="btn-primary">
+              <Link href={`/dashboard/store/${store._id}/add-product`} className="btn-primary">
                 Agregar Primer Producto
               </Link>
             </div>
@@ -213,7 +213,7 @@ export default function ManageStore() {
                     </div>
                     <div className="flex space-x-2">
                       <Link
-                        href={`/dashboard/store/${params.id}/product/${product._id}/edit`}
+                        href={`/dashboard/store/${store._id}/product/${product._id}/edit`}
                         className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-center py-2 px-4 rounded-lg text-sm font-medium transition-colors"
                       >
                         Editar
