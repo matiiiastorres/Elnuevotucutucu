@@ -1,26 +1,34 @@
-// 🔧 Configuración básica de Firebase Storage para subir imágenes
+// utils/firebase.js
 
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid'; // para generar IDs únicos de imágenes
+import { v4 as uuidv4 } from 'uuid'; // ✅ UUID correctamente importado
 
-// 📦 Datos de tu proyecto Firebase
+// 📦 Configuración de tu proyecto Firebase
 const firebaseConfig = {
-  projectId: 'matias-mit-wallet',
-  storageBucket: 'matias-mit-wallet.appspot.com',
-  locationId: 'us-central',
   apiKey: 'AIzaSyBFzo6F4575YyWg5Oqqq5ZLwg7WnpP1zYc',
   authDomain: 'matias-mit-wallet.firebaseapp.com',
+  projectId: 'matias-mit-wallet',
+  storageBucket: 'matias-mit-wallet.appspot.com',
   messagingSenderId: '390985326962',
+  locationId: 'us-central',
 };
 
+// 🚀 Inicializar Firebase y obtener Storage
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
+// ⬆️ Función para subir archivo y obtener URL de descarga
 export const uploadFile = async (file) => {
-  const storageRef = ref(storage, `profile-images/${Date.now()}-${file.name}`);
+  const uniqueFileName = `profile-images/${uuidv4()}-${file.name}`;
+  const storageRef = ref(storage, uniqueFileName);
+
   await uploadBytes(storageRef, file);
+
   const downloadURL = await getDownloadURL(storageRef);
+
+  console.log('✅ URL generada para MongoDB:', downloadURL); // ✅ LOG para ver la URL
+
   return downloadURL;
 };
 
