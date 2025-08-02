@@ -673,7 +673,7 @@ export default function Profile() {
               </a> */}
               <a
                 href="/dashboard/create-store"
-                className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg text-center font-medium transition-colors"
+                className="bg-primary-600 hover:bg-primary-700 text-white p-4 rounded-lg text-center font-medium transition-colors"
               >
                 ➕ Crear Nueva Tienda
               </a>
