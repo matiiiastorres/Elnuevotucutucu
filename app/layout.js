@@ -1,12 +1,12 @@
-import "./globals.css"
-import { AuthProvider } from "./context/AuthContext"
-import { CartProvider } from "./context/CartContext"
+import './globals.css';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 export const metadata = {
-  title: "DeliveryApp - Pedidos a domicilio",
-  description: "La mejor app de delivery de tu ciudad",
-    generator: 'v0.dev'
-}
+  title: 'El Tucu - Pedidos a domicilio',
+  description: 'Aplicacion cripto',
+  generator: 'v0.dev',
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -19,5 +19,5 @@ export default function RootLayout({ children }) {
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }
