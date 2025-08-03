@@ -353,16 +353,18 @@
 //   )
 // }
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '../../../../context/AuthContext';
 import Header from '../../../../components/Header';
-import ImageUpload from '../../../../components/ImageUpload';
+import { uploadFile } from '@/utils/firebase';
 
 export default function EditStore() {
   const params = useParams();
   const router = useRouter();
   const { user, getAuthHeaders, apiUrl } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -378,9 +380,11 @@ export default function EditStore() {
     deliveryFee: 0,
     image: '',
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [fetchLoading, setFetchLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   const categories = [
     { id: 'restaurant', name: 'Restaurante' },
@@ -431,26 +435,39 @@ export default function EditStore() {
 
     if (name.includes('address.')) {
       const addressField = name.split('.')[1];
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         address: {
-          ...formData.address,
+          ...prev.address,
           [addressField]: value,
         },
-      });
+      }));
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         [name]: value,
-      });
+      }));
     }
   };
 
-  const handleImageChange = (imageUrl) => {
-    setFormData({
-      ...formData,
-      image: imageUrl,
-    });
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const imageUrl = await uploadFile(file);
+      console.log('✅ URL generada para MongoDB:', imageUrl);
+
+      setFormData((prev) => ({
+        ...prev,
+        image: imageUrl,
+      }));
+    } catch (err) {
+      console.error('❌ Error subiendo imagen:', err);
+      alert('Error al subir la imagen.');
+    }
+    setUploading(false);
   };
 
   const handleSubmit = async (e) => {
@@ -514,7 +531,6 @@ export default function EditStore() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-
       <div className="max-w-2xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Editar Tienda</h1>
 
@@ -528,67 +544,62 @@ export default function EditStore() {
             </div>
           )}
 
-          {/* Imagen de la tienda */}
+          {/* Imagen */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Imagen de la tienda
             </label>
-            <ImageUpload
-              currentImage={formData.image}
-              onImageChange={handleImageChange}
-              type="store"
-            />
+            {formData.image && (
+              <img
+                src={formData.image}
+                alt="Imagen de tienda"
+                className="w-full h-48 object-cover rounded mb-2"
+              />
+            )}
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            {uploading && (
+              <p className="text-sm text-gray-500 mt-1">Subiendo imagen...</p>
+            )}
           </div>
 
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Nombre de la tienda *
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Nombre *
             </label>
             <input
-              id="name"
-              name="name"
               type="text"
-              required
-              className="input-field"
+              name="name"
               value={formData.name}
               onChange={handleChange}
+              className="input-field"
+              required
             />
           </div>
 
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Descripción *
             </label>
             <textarea
-              id="description"
               name="description"
-              required
-              rows={3}
-              className="input-field"
               value={formData.description}
               onChange={handleChange}
+              className="input-field"
+              rows={3}
+              required
             />
           </div>
 
           <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Categoría *
             </label>
             <select
-              id="category"
               name="category"
-              className="input-field"
               value={formData.category}
               onChange={handleChange}
+              className="input-field"
+              required
             >
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -600,152 +611,109 @@ export default function EditStore() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Teléfono *
               </label>
               <input
-                id="phone"
-                name="phone"
                 type="tel"
-                required
-                className="input-field"
+                name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="+54 9 11 1234-5678"
+                className="input-field"
+                required
               />
             </div>
-
             <div>
-              <label
-                htmlFor="whatsapp"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 WhatsApp *
               </label>
               <input
-                id="whatsapp"
-                name="whatsapp"
                 type="tel"
-                required
-                className="input-field"
+                name="whatsapp"
                 value={formData.whatsapp}
                 onChange={handleChange}
-                placeholder="5491112345678"
+                className="input-field"
+                required
               />
             </div>
           </div>
 
           <div>
-            <label
-              htmlFor="address.street"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Dirección *
             </label>
             <input
-              id="address.street"
-              name="address.street"
               type="text"
-              required
-              className="input-field"
+              name="address.street"
               value={formData.address.street}
               onChange={handleChange}
-              placeholder="Calle y número"
+              className="input-field"
+              required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="address.city"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Ciudad *
               </label>
               <input
-                id="address.city"
-                name="address.city"
                 type="text"
-                required
-                className="input-field"
+                name="address.city"
                 value={formData.address.city}
                 onChange={handleChange}
+                className="input-field"
+                required
               />
             </div>
-
             <div>
-              <label
-                htmlFor="address.zipCode"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Código Postal *
               </label>
               <input
-                id="address.zipCode"
-                name="address.zipCode"
                 type="text"
-                required
-                className="input-field"
+                name="address.zipCode"
                 value={formData.address.zipCode}
                 onChange={handleChange}
+                className="input-field"
+                required
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="deliveryTime"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tiempo de entrega
               </label>
               <input
-                id="deliveryTime"
-                name="deliveryTime"
                 type="text"
-                className="input-field"
+                name="deliveryTime"
                 value={formData.deliveryTime}
                 onChange={handleChange}
-                placeholder="30-45 min"
+                className="input-field"
               />
             </div>
-
             <div>
-              <label
-                htmlFor="deliveryFee"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Costo de envío ($)
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Costo de envío
               </label>
               <input
-                id="deliveryFee"
-                name="deliveryFee"
                 type="number"
-                min="0"
-                step="0.01"
-                className="input-field"
+                name="deliveryFee"
                 value={formData.deliveryFee}
                 onChange={handleChange}
+                className="input-field"
+                min="0"
               />
             </div>
           </div>
 
-          <div className="flex space-x-4">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors"
-            >
-              Cancelar
-            </button>
+          <div className="flex justify-end">
             <button
               type="submit"
-              disabled={loading}
-              className="flex-1 btn-primary disabled:opacity-50"
+              className="btn-primary px-6 py-2"
+              disabled={loading || uploading}
             >
               {loading ? 'Guardando...' : 'Guardar Cambios'}
             </button>
