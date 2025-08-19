@@ -25,15 +25,23 @@ export default function Dashboard() {
     fetchMyStores();
   }, [user]);
 
+  // const fetchMyStores = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${
+  //         process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+  //       }/api/stores/my/stores`,
+  //       {
+  //         headers: getAuthHeaders(),
+  //       }
+  //     );
+
   const fetchMyStores = async () => {
     try {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-        }/api/stores/my/stores`,
-        {
-          headers: getAuthHeaders(),
-        }
+        }/api/stores/my/stores`
       );
 
       if (response.ok) {
