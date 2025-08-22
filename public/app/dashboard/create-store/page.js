@@ -393,16 +393,17 @@ export default function CreateStore() {
     }
   };
 
-  // 📍 Buscar dirección con Nominatim
+  // 📍 Nominatim: Autocompletar dirección con lat/lng + país, provincia, fullAddress
   const handleGeocode = async () => {
     const query = `${formData.address.street} ${formData.address.city} ${formData.address.zipCode}`;
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
+        `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=${encodeURIComponent(
           query
         )}`
       );
       const data = await res.json();
+
       if (data.length > 0) {
         const place = data[0];
 
@@ -588,7 +589,7 @@ export default function CreateStore() {
               className="input-field"
               value={formData.address.street}
               onChange={handleChange}
-              placeholder="Calle y número"
+              placeholder="Calle"
             />
           </div>
 
@@ -621,13 +622,13 @@ export default function CreateStore() {
             </div>
           </div>
 
-          {/* Botón para autocompletar con Nominatim */}
+          {/* 📍 Botón para autocompletar usando Nominatim */}
           <button
             type="button"
             onClick={handleGeocode}
             className="w-full bg-blue-500 text-white py-2 rounded-lg"
           >
-            Buscar dirección en mapa
+            Completar dirección con mapa
           </button>
 
           {/* Delivery */}
