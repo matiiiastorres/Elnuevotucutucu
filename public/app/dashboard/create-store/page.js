@@ -437,6 +437,9 @@ export default function CreateStore() {
     setLoading(true);
     setError('');
 
+    // 🔎 DEBUG: ver qué datos se mandan al backend
+    console.log('📤 Datos enviados al backend:', formData);
+
     try {
       const response = await fetch(
         `${
