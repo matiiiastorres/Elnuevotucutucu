@@ -673,7 +673,7 @@ export default function CreateStore() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tiempo de entrega
+                Tiempo de entregayyyy
               </label>
               <input
                 name="deliveryTime"
