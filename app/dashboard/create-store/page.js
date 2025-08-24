@@ -683,11 +683,12 @@ export default function CreateStore() {
       street: '',
       streetNumber: '',
       city: '',
-      state: '', // agregado
-      country: '', // agregado
+      state: '',
+      country: '',
       zipCode: '',
       lat: null,
       lng: null,
+      fullAddress: '',
     },
     deliveryTime: '30-45 min',
     deliveryFee: 0,
@@ -721,7 +722,7 @@ export default function CreateStore() {
     }
   };
 
-  // Capturar ubicación
+  // Capturar ubicación con GPS y Nominatim
   const handleUseMyLocation = () => {
     if (!navigator.geolocation) {
       alert('Tu navegador no soporta GPS');
@@ -758,17 +759,19 @@ export default function CreateStore() {
             }
           }
 
+          // Guardamos todos los datos relevantes
           setFormData({
             ...formData,
             address: {
               street,
               streetNumber,
-              city: data.address.town || data.address.city || '',
-              state: data.address.state || '', // ahora se guarda provincia
-              country: data.address.country || '', // ahora se guarda país
+              city: data.address.city || data.address.town || '',
+              state: data.address.state || '',
+              country: data.address.country || '',
               zipCode: data.address.postcode || '',
               lat,
               lng,
+              fullAddress: data.display_name || '',
             },
           });
           setLocationSet(true);
@@ -809,7 +812,6 @@ export default function CreateStore() {
         }
       );
       const data = await response.json();
-      console.log('📤 Datos enviados al backend:', formData);
       console.log('Respuesta backend:', data);
 
       if (response.ok) {
@@ -857,12 +859,15 @@ export default function CreateStore() {
             </div>
           )}
 
-          {/* Nombre */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Nombre de la tienda *
             </label>
             <input
+              id="name"
               name="name"
               type="text"
               required
@@ -872,12 +877,15 @@ export default function CreateStore() {
             />
           </div>
 
-          {/* Descripción */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Descripción *
             </label>
             <textarea
+              id="description"
               name="description"
               required
               rows={3}
@@ -887,12 +895,15 @@ export default function CreateStore() {
             />
           </div>
 
-          {/* Categoría */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Categoría *
             </label>
             <select
+              id="category"
               name="category"
               className="input-field"
               value={formData.category}
@@ -906,13 +917,16 @@ export default function CreateStore() {
             </select>
           </div>
 
-          {/* Teléfonos */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Teléfono *
               </label>
               <input
+                id="phone"
                 name="phone"
                 type="tel"
                 required
@@ -923,10 +937,14 @@ export default function CreateStore() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="whatsapp"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 WhatsApp *
               </label>
               <input
+                id="whatsapp"
                 name="whatsapp"
                 type="tel"
                 required
@@ -938,7 +956,6 @@ export default function CreateStore() {
             </div>
           </div>
 
-          {/* Botón ubicación */}
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
@@ -954,7 +971,6 @@ export default function CreateStore() {
             )}
           </div>
 
-          {/* Mapa preview */}
           {formData.address.lat && formData.address.lng && (
             <iframe
               width="100%"
@@ -973,13 +989,16 @@ export default function CreateStore() {
             ></iframe>
           )}
 
-          {/* Delivery */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="deliveryTime"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Tiempo de entrega
               </label>
               <input
+                id="deliveryTime"
                 name="deliveryTime"
                 type="text"
                 className="input-field"
@@ -989,10 +1008,14 @@ export default function CreateStore() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="deliveryFee"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Costo de envío ($)
               </label>
               <input
+                id="deliveryFee"
                 name="deliveryFee"
                 type="number"
                 min="0"
@@ -1004,14 +1027,13 @@ export default function CreateStore() {
             </div>
           </div>
 
-          {/* Botones */}
           <div className="flex space-x-4">
             <button
               type="button"
               onClick={() => router.back()}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors"
             >
-              Cancelar
+              Cancelareee
             </button>
             <button
               type="submit"
