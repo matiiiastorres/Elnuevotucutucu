@@ -332,6 +332,7 @@
 //     </div>
 //   );
 // }
+
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -393,9 +394,11 @@ export default function CreateStore() {
     }
   };
 
-  // 📍 Nominatim: Autocompletar dirección con lat/lng + país, provincia, fullAddress
+  // 📍 Nominatim: Autocompletar dirección con lat/lng + país, provincia, ciudad
   const handleGeocode = async () => {
-    const query = `${formData.address.street} ${formData.address.city} ${formData.address.zipCode}`;
+    // 🔥 Ahora agregamos state y country al query
+    const query = `${formData.address.street} ${formData.address.city} ${formData.address.state} ${formData.address.country} ${formData.address.zipCode}`;
+
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=${encodeURIComponent(
@@ -406,29 +409,32 @@ export default function CreateStore() {
 
       if (data.length > 0) {
         const place = data[0];
+        console.log('📍 Resultado Nominatim:', place);
 
-        setFormData({
-          ...formData,
+        setFormData((prev) => ({
+          ...prev,
           address: {
-            ...formData.address,
-            street: formData.address.street || place.address?.road || '',
+            ...prev.address,
+            street: prev.address.street || place.address?.road || '',
             streetNumber: place.address?.house_number || '',
             city:
-              formData.address.city ||
+              prev.address.city ||
               place.address?.town ||
               place.address?.city ||
               '',
-            state: place.address?.state || '',
-            country: place.address?.country || '',
-            zipCode: formData.address.zipCode || place.address?.postcode || '',
+            state: place.address?.state || prev.address.state || '',
+            country: place.address?.country || prev.address.country || '',
+            zipCode: prev.address.zipCode || place.address?.postcode || '',
             lat: parseFloat(place.lat),
             lng: parseFloat(place.lon),
             fullAddress: place.display_name || '',
           },
-        });
+        }));
+      } else {
+        console.warn('❌ Nominatim no devolvió resultados');
       }
     } catch (err) {
-      console.error('Error con Nominatim', err);
+      console.error('⚠️ Error con Nominatim', err);
     }
   };
 
@@ -583,7 +589,7 @@ export default function CreateStore() {
           {/* Dirección */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Dirección *
+              Calle *
             </label>
             <input
               name="address.street"
@@ -607,6 +613,35 @@ export default function CreateStore() {
                 required
                 className="input-field"
                 value={formData.address.city}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Provincia / Estado *
+              </label>
+              <input
+                name="address.state"
+                type="text"
+                required
+                className="input-field"
+                value={formData.address.state}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                País *
+              </label>
+              <input
+                name="address.country"
+                type="text"
+                required
+                className="input-field"
+                value={formData.address.country}
                 onChange={handleChange}
               />
             </div>
