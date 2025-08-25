@@ -318,6 +318,9 @@ import Cart from './components/Cart';
 import StoreCategories from './components/StoreCategories';
 import FeaturedStores from './components/FeaturedStores';
 import StoreMap from './components/StoreMap';
+import TucuWalletPng from '../public/images/matilogo grandetu.png';
+import Image from 'next/image';
+import Link from 'next/link';
 
 function BottomNavbar({ current, setCurrent }) {
   const items = [
@@ -372,15 +375,50 @@ export default function Home() {
 
   const sections = {
     home: (
+      // <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
+      //   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      //     <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      //       Pedidos a domicilio en minutos
+      //     </h1>
+      //     <p className="text-xl md:text-2xl mb-8 opacity-90">
+      //       Descubre los mejores restaurantes y tiendas de tu ciudad
+      //     </p>
+      //     <div className="mt-8 rounded-lg overflow-hidden">
+      //       <StoreMap />
+      //     </div>
+      //   </div>
+      // </section>
+
       <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Pedidos a domicilio en minutos
+          {/* Imagen TucuWallet */}
+          <Image
+            src={TucuWalletPng}
+            alt="TucuWallet"
+            className="w-full max-w-[500px] h-auto mx-auto mb-6"
+            priority
+          />
+
+          {/* Título */}
+          <h1
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            style={{ fontFamily: 'Arial, sans-serif' }}
+          >
+            TU NUEVA BILLETERA WEB3
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
-            Descubre los mejores restaurantes y tiendas de tu ciudad
-          </p>
-          <div className="mt-8 rounded-lg overflow-hidden">
+
+          {/* Botón */}
+          <div className="text-center mb-10">
+            <Link
+              href="/login"
+              className="bg-white hover:bg-blue-800 transition-colors text-black py-3 px-10 font-bold rounded-lg text-sm md:text-base"
+            >
+              Empezar
+            </Link>
+          </div>
+
+          {/* Mapa de tiendas */}
+          <div className="mt-8 rounded-lg overflow-hidden shadow-lg border border-white/20">
             <StoreMap />
           </div>
         </div>

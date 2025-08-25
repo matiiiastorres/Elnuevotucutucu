@@ -217,7 +217,7 @@ export default function StoreMap() {
     <div
       style={{
         width: '100%',
-        height: '510px',
+        height: '410px',
         borderRadius: '10px',
         overflow: 'hidden',
       }}
