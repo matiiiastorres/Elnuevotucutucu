@@ -217,8 +217,8 @@ export default function StoreMap() {
     <div
       style={{
         width: '100%',
-        height: '600px',
-        borderRadius: '8px',
+        height: '510px',
+        borderRadius: '10px',
         overflow: 'hidden',
       }}
     >
@@ -275,9 +275,9 @@ export default function StoreMap() {
               style={{
                 width: '20px',
                 height: '20px',
-                backgroundColor: 'red',
+                backgroundColor: 'blue',
                 borderRadius: '50%',
-                border: '2px solid white',
+                border: '1px solid white',
               }}
             />
           </Marker>
